@@ -39,6 +39,8 @@ float ve[3];
 float prodLuN;
 float prodVeR;
 float Pint[3];
+float centro[3];
+int tipo;
 
 float Iam[3];
 float Idif[3];
@@ -169,7 +171,7 @@ float intersecao_cone(float D[3], float v[3], float A[3], float cosAlfa, float l
 }
 
 /////////////////CALCULA A COR DOS PARANAUE//////////////////////////
-void cor(int obj, float centro[3]){
+void cor(int obj){
    float aux[3];
    float observador[3] = {0, 0, 0};
    sub(observador, Pint, ve);
@@ -229,6 +231,19 @@ void cor(int obj, float centro[3]){
 
 }
 
+void pintVisivel(float PintAux[3], int tip, float cent[3]){
+   if (tipo == -1 or norma(Pint) > norma(PintAux)) {
+      Pint[0] = PintAux[0];
+      Pint[1] = PintAux[1];
+      Pint[2] = PintAux[2];
+
+      centro[0] = cent[0];
+      centro[1] = cent[1];
+      centro[2] = cent[2];
+
+      tipo = tip;
+   }
+}
 
 ///////////////////FUNÇÃO QUE PINTA A TELA
 void drawScene(void) {
@@ -237,41 +252,50 @@ void drawScene(void) {
    float v[3];
    float observador[3] = {0,0,0};
 
-   //Informações dos Objetos 
-   float r1 = 30;
+//Informações dos Objetos
+   //CORPO 
+   float r1 = 23;
    float w1[3];
-   float centro1[3] = {0, 20, -51};
+   float centro1[3] = {0, 26, -40};
    sub(observador, centro1, w1);
 
    float r2 = 40;
    float w2[3];
-   float centro2[3] = {0, -20, -51};
+   float centro2[3] = {0, -16, -51};
    sub(observador, centro2, w2);
 
+   //BOTÕES
    float rb1 = 2;
    float wb1[3];
-   float centrob1[3] = {0, -10, -20};
+   float centrob1[3] = {0, 0, -15};
    sub(observador, centrob1, wb1);
 
-   float rb2 = 1.9;
+   float rb2 = 2;
    float wb2[3];
-   float centrob2[3] = {0, -20, -20};
+   float centrob2[3] = {0, -5, -13.7};
    sub(observador, centrob2, wb2);
 
-   float rb3 = 1.7;
+   float rb3 = 2;
    float wb3[3];
-   float centrob3[3] = {0, -30, -20};
+   float centrob3[3] = {0, -10, -12.5};
    sub(observador, centrob3, wb3);
 
+   //OLHOS
    float ro1 = 2;
    float wo1[3];
-   float centroo1[3] = {5, 10, -25};
+   float centroo1[3] = {4, 20, -19};
    sub(observador, centroo1, wo1);
 
    float ro2 = 2;
    float wo2[3];
-   float centroo2[3] = {-5, 10, -25};
+   float centroo2[3] = {-4, 20, -19};
    sub(observador, centroo2, wo2);
+
+   //Esfera de testes
+   float rt = 10;
+   float wt[3];
+   float centrot[3] = {-5, 10, -17};
+   sub(observador, centrot, wt);
 
    //Conezinhoo Funciona nunca te pedi nada
    float rc = 5;
@@ -297,43 +321,46 @@ void drawScene(void) {
             float pixel[3] = {x, y, d};
 
             sub(pixel, observador, v);
+
+            float PintAux[3] = {0, 0, 0};
+            tipo = -1;
+
+            glColor3f(0.8, 0.9, 0.9);
+            //if (intersecao_esfera(v, wt, rt, PintAux)){   //Teste do Bucho / Cabeça
+              // pintVisivel(PintAux, 3, centrot);
+            //} 
+            if (intersecao_esfera(v, wb1, rb1, PintAux)){        //Teste do Primeiro Botão
+               pintVisivel(PintAux, 1, centrob1);
+
+            } if (intersecao_esfera(v, wb2, rb2, PintAux)){  //Teste do Segundo Botão
+               pintVisivel(PintAux, 1, centrob2);
             
-            if (intersecao_esfera(v, wb1, rb1, Pint)){        //Teste do Primeiro Botão
-               cor(1, centrob1);
-               glColor3f(Ipix[0], Ipix[1], Ipix[2]);
+            } if (intersecao_esfera(v, wb3, rb3, PintAux)) { //Teste do Terceiro Botão
+               pintVisivel(PintAux, 1, centrob3);
 
-            } else if(intersecao_esfera(v, wb2, rb2, Pint)){  //Teste do Segundo Botão
-               cor(1, centrob2);
-               glColor3f(Ipix[0], Ipix[1], Ipix[2]);
-            
-            } else if(intersecao_esfera(v, wb3, rb3, Pint)) { //Teste do Terceiro Botão
-               cor(1, centrob3);
-               glColor3f(Ipix[0], Ipix[1], Ipix[2]);
+            } if (intersecao_esfera(v, wo1, ro1, PintAux)){  //Teste do Primeiro Olho
+               pintVisivel(PintAux, 3, centroo1);
 
-            } else if (intersecao_esfera(v, wo1, ro1, Pint)){  //Teste do Primeiro Olho
-               cor(3, centroo1);
-               glColor3f(Ipix[0], Ipix[1], Ipix[2]);
-
-            } else if(intersecao_esfera(v, wo2, ro2, Pint)){  //Teste do Segundo Olho
-               cor(3, centroo2);
-               glColor3f(Ipix[0], Ipix[1], Ipix[2]);
+            } if (intersecao_esfera(v, wo2, ro2, PintAux)){  //Teste do Segundo Olho
+               pintVisivel(PintAux, 3, centroo2);
               
-            } else if (intersecao_esfera(v, w1, r1, Pint)) {   //Teste da Cabeça / Bucho
-               cor(2, centro1);
-               glColor3f(Ipix[0], Ipix[1], Ipix[2]);
+            } if (intersecao_esfera(v, w1, r1, PintAux)) {   //Teste da Cabeça / Bucho
+               pintVisivel(PintAux, 2, centro1);
             
-            } else if (intersecao_esfera(v, w2, r2, Pint)){   //Teste do Bucho / Cabeça
-               cor(2, centro2);
-               glColor3f(Ipix[0], Ipix[1], Ipix[2]);
+            } if (intersecao_esfera(v, w2, r2, PintAux)){   //Teste do Bucho / Cabeça
+               pintVisivel(PintAux, 2, centro2);
 
-            } /*else if (intersecao_cone(v, vc, ac, cosTeta, lado, Pint)){
+            } 
+            if (tipo != -1) {
+               cor(tipo);
+               glColor3f(Ipix[0], Ipix[1], Ipix[2]);
+            }
+
+            /*else if (intersecao_cone(v, vc, ac, cosTeta, lado, Pint)){
                glColor3f(0.5, 0.5, 0.5);
 
 
-            } */else{               //Cor de BackGround
-               glColor3f(0.8, 0.9, 0.9);
-
-            }
+            } */
 
             glVertex2f(c, l);     //Pinta o Pixel
          }
