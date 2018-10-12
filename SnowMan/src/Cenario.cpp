@@ -1,10 +1,13 @@
 #include "../header/Cenario.h"
 
-void setCenario(Objeto *cenario[10], Luz *luzes[10], int *quantObjetos){
-	double coordCamera[3] = {0, 133, 874}; 
-	double loockAt[3] = {0, 116, 746};
-	double viewUp[3] = {0, 233, 732};
-	Camera camera(coordCamera, loockAt, viewUp);
+void setCenario(Objeto *cenario[10], Luz *luzes[10], int *quantObjetos, int *quantLuzes){ 
+
+//-----------------------------CAMERAS-----------------------------//
+
+	double coordCameraFrente[3] = {0, 133, 874}; 
+	double loockAtFrente[3] = {0, 116, 746};
+	double viewUpFrente[3] = {0, 233, 732};
+	Camera cameraFrente(coordCameraFrente, loockAtFrente, viewUpFrente);
 
 	double coordCameraCima[3] = {0, 874, 0}; 
 	double loockAtCima[3] = {0, 750, 0};
@@ -16,14 +19,26 @@ void setCenario(Objeto *cenario[10], Luz *luzes[10], int *quantObjetos){
 	double viewUpLado[3] = {760, 320, 0};
 	Camera cameraLado(coordCameraLado, loockAtLado, viewUpLado);
 
+	double coordCameraCosta[3] = {0, 0, -874}; 
+	double loockAtCosta[3] = {0, 3, -750};
+	double viewUpCosta[3] = {0, 320, -750};
+	Camera cameraCosta(coordCameraCosta, loockAtCosta, viewUpCosta);
+
+	double coordCameraTorta[3] = {868, 100, 691}; 
+	double loockAtTorta[3] = {615, 75, 490};
+	double viewUpTorta[3] = {615, 400, 490};
+	Camera cameraTorta(coordCameraTorta, loockAtTorta, viewUpTorta);
+
+//-----------------------------MATERIAIS-----------------------------//
+
 	double amb1[3] = {0.8, 0.8, 0.8}; 
-	double dif1[3] = {0.7, 0.7, 0.7}; 
+	double dif1[3] = {0.8, 0.8, 0.8}; 
 	double esp1[3] = {0.7, 0.7, 0.7};
 	Material *corpoMat = new Material(amb1, dif1, esp1, 1);
 
 	double amb2[3] = {0.7, 0.4, 0.4}; 
 	double dif2[3] = {0.7, 0.3, 0.3}; 
-	double esp2[3] = {0.7, 0.3, 0.3};
+	double esp2[3] = {0.7, 0.5, 0.5};
 	Material *botaoMat = new Material(amb2, dif2, esp2, 3);
 
 	double amb3[3] = {0.1, 0.1, 0.1}; 
@@ -32,7 +47,7 @@ void setCenario(Objeto *cenario[10], Luz *luzes[10], int *quantObjetos){
 	Material *olhoMat = new Material(amb3, dif3, esp3, 9);
 
 	double amb4[3] = {0.2, 0.7, 0.2}; 
-	double dif4[3] = {0.72, 0.72, 0.72}; 
+	double dif4[3] = {0.2, 0.72, 0.2}; 
 	double esp4[3] = {0.92, 0.92, 0.92};
 	Material *cartolaMat = new Material(amb4, dif4, esp4, 2);
 
@@ -41,139 +56,167 @@ void setCenario(Objeto *cenario[10], Luz *luzes[10], int *quantObjetos){
 	double esp5[3] = {0.92, 0.92, 0.92};
 	Material *narizMat = new Material(amb5, dif5, esp5, 2);
 
-	double coodLuz[3] = {0, 200, 400};
-	double cor[3] = {0.3, 0.3, 0.3};
-	Luz *poste = new Luz(coodLuz, cor);
+//-----------------------------LUZES-----------------------------//
+	double coodYLuz1 = 100;
+	double coodZLuz1 = 60;
+	double coodZLuz2 = 50;
 
-	//Informações dos Objetos
-	//CORPO 
-	double centro1[3] = {0, 20, -40};
-	Objeto *cabeca = new Esfera(23.0, centro1, corpoMat);
+	double coodLuz1[3] = {-10, coodYLuz1, coodZLuz1};
+	double cor[3] = {0.05, 0.05, 0.05};
+	Luz *poste1 = new Luz(coodLuz1, cor);
+
+	double coodLuz2[3] = {-5, coodYLuz1, coodZLuz1};
+	Luz *poste2 = new Luz(coodLuz2, cor);
+
+	double coodLuz3[3] = {0, coodYLuz1, coodZLuz1};
+	Luz *poste3 = new Luz(coodLuz3, cor);
+
+	double coodLuz4[3] = {5, coodYLuz1, coodZLuz1};
+	Luz *poste4 = new Luz(coodLuz4, cor);
+
+	double coodLuz5[3] = {10, coodYLuz1, coodZLuz1};
+	Luz *poste5 = new Luz(coodLuz5, cor);
+
+	double coodLuz6[3] = {-10, coodYLuz1, coodZLuz2};
+	Luz *poste6 = new Luz(coodLuz6, cor);
+
+	double coodLuz7[3] = {-5, coodYLuz1, coodZLuz2};
+	Luz *poste7 = new Luz(coodLuz7, cor);
+
+	double coodLuz8[3] = {0, coodYLuz1, coodZLuz2};
+	Luz *poste8 = new Luz(coodLuz8, cor);
+
+	double coodLuz9[3] = {5, coodYLuz1, coodZLuz2};
+	Luz *poste9 = new Luz(coodLuz9, cor);
+
+	double coodLuz10[3] = {10, coodYLuz1, coodZLuz2};
+	Luz *poste10 = new Luz(coodLuz10, cor);
+
+//-----------------------------OBJETOS-----------------------------//
+
+	double centro10[3] = {0, -1050 , 0};
+	Objeto *piso = new Esfera(1000, centro10, corpoMat);
 	
-	double centro2[3] = {0, -16, -51};
+	double centro1[3] = {0, 40, 0};
+	Objeto *cabeca = new Esfera(20.0, centro1, corpoMat);
+	
+	double centro2[3] = {0, -16, 0};
 	Objeto *corpo = new Esfera(40.0, centro2, corpoMat);
 
-	double centro3[3] = {0, 0, -15};
-	Objeto *botao1 = new Esfera(2, centro3, botaoMat);
+	double centro3[3] = {0, 16, 24};
+	Objeto *botao1 = new Esfera(3, centro3, botaoMat);
 
-	double centro4[3] = {0, -6, -13.7};
-	Objeto *botao2 = new Esfera(2, centro4, botaoMat);
+	double centro4[3] = {0, 7, 33};
+	Objeto *botao2 = new Esfera(3, centro4, botaoMat);
 
-	double centro5[3] = {0, -10, -12.5};
-	Objeto *botao3 = new Esfera(2, centro5, botaoMat);
+	double centro5[3] = {0, -3, 38};
+	Objeto *botao3 = new Esfera(3, centro5, botaoMat);
 
-	double centro6[3] = {4, 20, -19};
-	Objeto *olho1 = new Esfera(2, centro6, olhoMat);
+	double centro6[3] = {-5, 43, 19};
+	Objeto *olho1 = new Esfera(3, centro6, olhoMat);
 
-	double centro7[3] = {-4, 20, -19};
-	Objeto *olho2 = new Esfera(2, centro7, olhoMat);
+	double centro7[3] = {5, 43, 19};
+	Objeto *olho2 = new Esfera(3, centro7, olhoMat);
 
-	double centro8[3] = {0, 21, -30};
-	double topo1[3] = {0, 38, -15};
-	Objeto *cartola = new Cone(24.6, centro8, topo1, cartolaMat);
+	double centro8[3] = {0, 50, 0};
+	double topo1[3] = {0, 88, 0};
+	Objeto *cartola = new Cone(19, centro8, topo1, cartolaMat);
 
-	double centro9[3] = {0, 17, -20};
-	double topo2[3] = {0, 17, -15};
-	Objeto *nariz = new Cone(2, centro9, topo2, narizMat);
+	double centro9[3] = {0, 34, 18};
+	double topo2[3] = {0, 34, 36};
+	Objeto *nariz = new Cone(3, centro9, topo2, narizMat);
 
-/////////////////////OBJETOS DE TESTE////////////////////////////////////
-	double centro10[3] = {0, -240 , 0};
-	Objeto *piso = new Esfera(200, centro10, corpoMat);
-	
-	double centro1T[3] = {0, 40, 0};
-	Objeto *cabecaT = new Esfera(20.0, centro1T, corpoMat);
-	
-	double centro2T[3] = {0, -16, 0};
-	Objeto *corpoT = new Esfera(40.0, centro2T, corpoMat);
+	double centro11[3] = {0, -50, 0};
+	double topo3[3] = {0, 90, 0};
+	Objeto *coneSombra = new Cone(19, topo3, centro11, cartolaMat);
 
-	double centro3T[3] = {0, 16, 24};
-	Objeto *botao1T = new Esfera(3, centro3T, botaoMat);
+//-----------------------------VETOR DE OBJETOS-----------------------------//
 
-	double centro4T[3] = {0, 6, 33};
-	Objeto *botao2T = new Esfera(3, centro4T, botaoMat);
-
-	double centro5T[3] = {0, -3, 38};
-	Objeto *botao3T = new Esfera(3, centro5T, botaoMat);
-
-	double centro6T[3] = {-5, 43, 19};
-	Objeto *olho1T = new Esfera(3, centro6T, olhoMat);
-
-	double centro7T[3] = {5, 43, 19};
-	Objeto *olho2T = new Esfera(3, centro7T, olhoMat);
-
-	double centro8T[3] = {0, 50, 0};
-	double topo1T[3] = {0, 88, 0};
-	Objeto *cartolaT = new Cone(19, centro8T, topo1T, cartolaMat);
-
-	double centro9T[3] = {0, 34, 36};
-	double topo2T[3] = {0, 34, 20};
-	Objeto *narizT = new Cone(3, centro9T, topo2T, narizMat);
-
-	cenario[0] = cabecaT;
-	cenario[1] = corpoT;
-	cenario[2] = botao1T;
-	cenario[3] = botao2T;
-	cenario[4] = botao3T;
-	cenario[5] = olho1T;
-	cenario[6] = olho2T;
-	cenario[7] = cartolaT;
-	cenario[8] = narizT;
+	cenario[0] = cabeca;
+	cenario[1] = corpo;
+	cenario[2] = botao1;
+	cenario[3] = botao2;
+	cenario[4] = botao3;
+	cenario[5] = olho1;
+	cenario[6] = olho2;
+	cenario[7] = cartola;
+	cenario[8] = nariz;
 	cenario[9] = piso;
 
-	//cenario[0] = narizT;
-	luzes[0] = poste;
+	luzes[0] = poste1;
+	luzes[1] = poste2;
+	luzes[2] = poste3;
+	luzes[3] = poste4;
+	luzes[4] = poste5;
+	luzes[5] = poste6;
+	luzes[6] = poste7;
+	luzes[7] = poste8;
+	luzes[8] = poste9;
+	luzes[9] = poste10;
 
 	*quantObjetos = 10;
-	for (int i = 0; i < 1; i++) luzes[i]->mudaCoodCamera(camera);
+	*quantLuzes = 10;
 
-	for (int i = 0; i < *quantObjetos; i++) cenario[i]->mudaCoodCamera(camera);
+/*
+	cenario[0] = piso;
+	cenario[1] = coneSombra;
+*/
+
+//-----------------------------COORDENADA DE MUNDO PARA CAMERA-----------------------------//
+
+	for (int i = 0; i < *quantLuzes; i++) luzes[i]->mudaCoodCamera(cameraTorta);
+
+	for (int i = 0; i < *quantObjetos; i++) cenario[i]->mudaCoodCamera(cameraTorta);
 }
 
-void corPint(Objeto *obj, double Pint[3], Luz *luz, double Iamb[3], double *Ipix, double quant){
-
-	double aux[3], coodLuz[3], If[3], Kdif[3], Kamb[3], Kesp[3], Iam[3], Iesp[3], Idif[3];
-	double v[3], l[3], r[3], n[3]; 
-	double prodLuN, prodVeR;
-	double observador[3] = {0, 0, 0};
+void corAmbriente(Objeto *obj, double Iamb[3], double *Ipix) {
+	double Kamb[3];
 
 	obj->getMaterial().getKamb(Kamb);
+
+	arroba(Iamb, Kamb, Ipix);
+
+}
+
+void corLuz(Objeto *obj, double Pint[3], Luz *luz, double *Ipix) {
+	double aux[3], coodLuz[3], If[3], Kdif[3], Kamb[3], Kesp[3], Iesp[3], Idif[3];
+	double v[3], l[3], r[3], n[3]; 
+	double prodLN, prodVR;
+	double observador[3] = {0, 0, 0};
+	int m;
+
+
+	obj->getN(Pint, n);
 	obj->getMaterial().getKesp(Kesp);
 	obj->getMaterial().getKdif(Kdif);
-	int m = obj->getMaterial().getM();
+	m = obj->getMaterial().getM();
 
 	luz->getIf(If);
 	luz->getCoordenada(coodLuz);
 
 	sub(observador, Pint, v);
-	obj->getN(Pint, n);
 	sub(coodLuz, Pint, l);
-
+	
 	vetNormal(v, v);
 	vetNormal(n, n);
 	vetNormal(l, l);
 
-	prodLuN = prod(l, n);
-
-	if (prodLuN < 0) prodLuN = 0;
-
-	prodVC(n, 2*(prod(l, n)), aux);
+	prodLN = prod(l, n);
+	if (prodLN < 0) prodLN = 0;
+	
+	prodVC(n, 2*(prodLN), aux);
 	sub(aux, l, r);
+	
+	prodVR = pow(prod(v, r), m);
 
-	prodVeR = pow(prod(v, r), m);
-
-	arroba(Iamb, Kamb, Iam);
 	arroba(If, Kdif, Idif);
 	arroba(If, Kesp, Iesp);
 
-	prodVC(Idif, prodLuN, Idif);
-	prodVC(Iesp, prodVeR, Iesp);
+	prodVC(Idif, prodLN, Idif);
+	prodVC(Iesp, prodVR, Iesp);
 	
-
-	sum(Iam, Idif, Ipix);
+	sum(Ipix, Idif, Ipix);
 	sum(Ipix, Iesp, Ipix);
-	
 
-	Ipix[0] = Ipix[0]/quant;	
-	Ipix[1] = Ipix[1]/quant;	
-	Ipix[2] = Ipix[2]/quant;	
-}	
+
+}

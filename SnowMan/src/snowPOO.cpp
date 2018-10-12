@@ -15,6 +15,8 @@ g++ -o main Cone.o Esfera.o Objeto.o Material.o Luz.o Funcoes.o snowPOO.o -lGL -
 --------modo 3
 g++ -c *.cpp && g++ -o main *.o -lGL -lGLU -lGLEW -lglut -lm -Wno-write-strings
 
+
+fazer camera e cenario
 */
 
 #  include <GL/glew.h>
@@ -34,72 +36,81 @@ double altura = 700.0;
 ///////////////////FUNÇÃO QUE PINTA A TELA
 void drawScene(void) {
 	double l, c, x, y;
+	//double d = -3500;
 	double d = -3500;
 	double v[3], Pint[3], Ipix[3];
 	double observador[3] = {0,0,0};
 
-	double luzAmbiente[3] = {1, 1, 1};
-	int quantObjetos;
+	double luzAmbiente[3] = {0.5, 0.5, 0.5};
+	int quantObjetos, quantLuzes;
 	
 	Objeto *cenario[10];
 	Luz *luzes[10];
 
-	setCenario(cenario, luzes, &quantObjetos);
+	setCenario(cenario, luzes, &quantObjetos, &quantLuzes);
 
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glBegin(GL_POINTS);
-	for(l = 0; l < 700; l++){
-	 y = bottom + l;
+		for(l = 0; l < 700; l++){
+			y = bottom + l;
 
-	 for(c = 0; c < 700; c++){
-	    x = left + c;
+			for(c = 0; c < 700; c++){
+				x = left + c;
 
-	    double pixel[3] = {x, y, d};
+				double pixel[3] = {x, y, d};
 
-	    sub(pixel, observador, v);
+				sub(pixel, observador, v);
 
-	    Ipix[0] = 0.8;
-	    Ipix[1] = 0.9;
-	    Ipix[2] = 0.9;
+				Ipix[0] = 0.8;
+				Ipix[1] = 0.9;
+				Ipix[2] = 0.9;
 
-	    double t = std::numeric_limits<double>::max();
-	    int indice = -1;
-	    
-	    for (int i = 0; i < quantObjetos; i++) {
-	    	if (cenario[i]->intersecaoCor(v, observador)) {
-	    		if (cenario[i]->getT() < t) {
-	    			t = cenario[i]->getT();
-	    			indice = i;
-	    		}
-	    		
-	    	}
-	    }
-	    if (indice != -1) {
-	    	double quantSombra = 1;
-	    	prodVC(v, t, Pint);
-	    
-	    	double vSombra[3];
-	    	double aux[3];
-	    	bool IndiceIgual = false;
-	    	luzes[0]->getCoordenada(aux);
-	    	
-	    	for (int i = 0; i < quantObjetos; i++) {
-	    		sub(aux, Pint, vSombra);
-		    	if (cenario[i]->intersecaoSombra(vSombra, Pint)) {
-		    		if (i == indice) IndiceIgual = true;
+				double t = std::numeric_limits<double>::max();
+				int indice = -1;
 
-		    		quantSombra += 10;
-		    	}
-		    }
-		    //if (IndiceIgual) quantSombra = 1;
+				for (int i = 0; i < quantObjetos; i++) {
+					if (cenario[i]->intersecaoCor(v, observador)) {
+						if (cenario[i]->getT() < t) {
+							t = cenario[i]->getT();
+							indice = i;
+						}
+					}
+				}
+
+				if (indice != -1) {
+					double vSombra[3], aux[3], n[3];
+					corAmbriente(cenario[indice], luzAmbiente, Ipix);
+
+					bool sombra;
+					prodVC(v, t, Pint);
+					for (int i = 0; i < quantLuzes; i++) {
+						sombra = false;
+						luzes[i]->getCoordenada(aux);
+						sub(aux, Pint, vSombra);
+						cenario[indice]->getN(Pint, n);
+
+						if (prod(n, vSombra) >= 0) {
+							for (int j = 0; j < quantObjetos; j++) {
+								if (j != indice and cenario[j]->intersecaoSombra(vSombra, Pint)) {
+									//sombra = true;
+								}
+							}
+
+							if (not sombra) corLuz(cenario[indice], Pint, luzes[i], Ipix);	
+						}
+
+					}
+
+					cenario[indice]->getN(Pint, aux);
+					//if (prod(aux, vSombra) < 0) quantSombra = 1;
+				}
+
+				glColor3f(Ipix[0], Ipix[1], Ipix[2]);
+				glVertex2f(c, l);
 			
-	    	corPint(cenario[indice], Pint, luzes[0], luzAmbiente, Ipix, quantSombra);
-	    }
-	    glColor3f(Ipix[0], Ipix[1], Ipix[2]);
-	    glVertex2f(c, l);
-	 }
-	}
+			}
+		}
 
    glEnd();
 
@@ -131,7 +142,6 @@ void resize(int w, int h) {
 	glLoadIdentity();
 }
 
-// Adicionei as coordenadas ordo aqui.
 int main(int argc, char **argv) {
 	glutInit(&argc, argv);
 
@@ -139,8 +149,10 @@ int main(int argc, char **argv) {
 
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA); 
 	glutInitWindowSize(700, 700);
-	glutInitWindowPosition(100, 100); 
-	glutCreateWindow("SnowMan");
+	//glutInitWindowPosition(300, 10); 
+	glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH)-700)/2,(glutGet(GLUT_SCREEN_HEIGHT)-700)/2);
+
+	glutCreateWindow("~s2~ SnowMan Fofiss ~s2~");
 	glutDisplayFunc(drawScene);
 	glutReshapeFunc(resize);
 	glutKeyboardFunc(Teclado);
