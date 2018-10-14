@@ -1,5 +1,5 @@
-#ifndef SNOWPOO_H
-#define SNOWPOO_H
+#ifndef MAIN_H
+#define MAIN_H
 
 #include <cmath>
 #include <cstdio>
@@ -18,4 +18,4 @@ void drawScene(void);
 void setup(void);
 void resize(int w, int h);
 
-#endif //SNOWPOO_H
+#endif //MAIN_H

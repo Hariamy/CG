@@ -19,24 +19,29 @@ void setCenario(Objeto *cenario[10], Luz *luzes[10], int *quantObjetos, int *qua
 	double viewUpLado[3] = {760, 320, 0};
 	Camera cameraLado(coordCameraLado, loockAtLado, viewUpLado);
 
-	double coordCameraCosta[3] = {0, 0, -874}; 
+	double coordCameraCosta[3] = {0, 0, -974}; 
 	double loockAtCosta[3] = {0, 3, -750};
 	double viewUpCosta[3] = {0, 320, -750};
 	Camera cameraCosta(coordCameraCosta, loockAtCosta, viewUpCosta);
 
-	double coordCameraTorta[3] = {868, 100, 691}; 
-	double loockAtTorta[3] = {615, 75, 490};
-	double viewUpTorta[3] = {615, 400, 490};
-	Camera cameraTorta(coordCameraTorta, loockAtTorta, viewUpTorta);
+	double coordCameraTortaD[3] = {868, 100, 691}; 
+	double loockAtTortaD[3] = {615, 75, 490};
+	double viewUpTortaD[3] = {615, 400, 490};
+	Camera cameraTortaD(coordCameraTortaD, loockAtTortaD, viewUpTortaD);
+
+	double coordCameraTortaE[3] = {-868, 100, 691}; 
+	double loockAtTortaE[3] = {-615, 75, 490};
+	double viewUpTortaE[3] = {-615, 400, 490};
+	Camera cameraTortaE(coordCameraTortaE, loockAtTortaE, viewUpTortaE);
 
 //-----------------------------MATERIAIS-----------------------------//
 
-	double amb1[3] = {0.8, 0.8, 0.8}; 
-	double dif1[3] = {0.8, 0.8, 0.8}; 
-	double esp1[3] = {0.7, 0.7, 0.7};
-	Material *corpoMat = new Material(amb1, dif1, esp1, 1);
+	double amb1[3] = {1.5, 1.5, 1.5}; 
+	double dif1[3] = {0.6, 0.6, 0.6}; 
+	double esp1[3] = {0.6, 0.6, 0.6};
+	Material *corpoMat = new Material(amb1, dif1, esp1, 8);
 
-	double amb2[3] = {0.7, 0.4, 0.4}; 
+	double amb2[3] = {0.7, 0.3, 0.3}; 
 	double dif2[3] = {0.7, 0.3, 0.3}; 
 	double esp2[3] = {0.7, 0.5, 0.5};
 	Material *botaoMat = new Material(amb2, dif2, esp2, 3);
@@ -48,18 +53,27 @@ void setCenario(Objeto *cenario[10], Luz *luzes[10], int *quantObjetos, int *qua
 
 	double amb4[3] = {0.2, 0.7, 0.2}; 
 	double dif4[3] = {0.2, 0.72, 0.2}; 
-	double esp4[3] = {0.92, 0.92, 0.92};
+	double esp4[3] = {0.8, 0.9, 0.8};
 	Material *cartolaMat = new Material(amb4, dif4, esp4, 2);
 
 	double amb5[3] = {0.9, 0.72, 0.2}; 
 	double dif5[3] = {0.9, 0.72, 0.2}; 
 	double esp5[3] = {0.92, 0.92, 0.92};
 	Material *narizMat = new Material(amb5, dif5, esp5, 2);
+	
+	double amb6[3] = {1, 1, 1}; 
+	double dif6[3] = {0.8, 0.8, 0.8}; 
+	double esp6[3] = {0.8, 0.8, 0.8};
+	Material *pisoMat = new Material(amb6, dif6, esp6, 1);
 
 //-----------------------------LUZES-----------------------------//
-	double coodYLuz1 = 100;
-	double coodZLuz1 = 60;
-	double coodZLuz2 = 50;
+	double coodYLuz1 = 1000;
+	double coodZLuz1 = 600;
+	double coodZLuz2 = 500;
+
+	double coodLuzPoste[3] = {0, 1000, 200};
+	double corPoste[3] = {0.6, 0.6, 0.6};
+	Luz *poste = new Luz(coodLuzPoste, corPoste);
 
 	double coodLuz1[3] = {-10, coodYLuz1, coodZLuz1};
 	double cor[3] = {0.05, 0.05, 0.05};
@@ -95,7 +109,7 @@ void setCenario(Objeto *cenario[10], Luz *luzes[10], int *quantObjetos, int *qua
 //-----------------------------OBJETOS-----------------------------//
 
 	double centro10[3] = {0, -1050 , 0};
-	Objeto *piso = new Esfera(1000, centro10, corpoMat);
+	Objeto *piso = new Esfera(1000, centro10, pisoMat);
 	
 	double centro1[3] = {0, 40, 0};
 	Objeto *cabeca = new Esfera(20.0, centro1, corpoMat);
@@ -154,7 +168,8 @@ void setCenario(Objeto *cenario[10], Luz *luzes[10], int *quantObjetos, int *qua
 	luzes[8] = poste9;
 	luzes[9] = poste10;
 
-	*quantObjetos = 10;
+	
+	*quantObjetos = 9;
 	*quantLuzes = 10;
 
 /*
@@ -164,9 +179,9 @@ void setCenario(Objeto *cenario[10], Luz *luzes[10], int *quantObjetos, int *qua
 
 //-----------------------------COORDENADA DE MUNDO PARA CAMERA-----------------------------//
 
-	for (int i = 0; i < *quantLuzes; i++) luzes[i]->mudaCoodCamera(cameraTorta);
+	for (int i = 0; i < *quantLuzes; i++) luzes[i]->mudaCoodCamera(cameraTortaE);
 
-	for (int i = 0; i < *quantObjetos; i++) cenario[i]->mudaCoodCamera(cameraTorta);
+	for (int i = 0; i < *quantObjetos; i++) cenario[i]->mudaCoodCamera(cameraTortaE);
 }
 
 void corAmbriente(Objeto *obj, double Iamb[3], double *Ipix) {
