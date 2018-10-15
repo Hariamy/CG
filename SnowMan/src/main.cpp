@@ -16,12 +16,23 @@ g++ -c *.cpp && g++ -o main *.o -O2 -L -lm -lpthread -lX11 -lGL -lGLU -lGLEW -lg
 fazer camera e cenario
 */
 
+#include <cmath>
+#include <cstdio>
+#include <limits>
+#include <vector>
 
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
-#include "../header/main.h"
-#include "../CImg-2.4.0/CImg.h"
+#include "../lib/CImg/CImg.h"
+
+#include "../header/Luz.h"
+#include "../header/Objeto.h"
+#include "../header/Esfera.h"
+#include "../header/Cone.h"
+#include "../header/Funcoes.h"
+#include "../header/Camera.h"
+#include "../header/Cenario.h"
 
 using namespace std;
 
@@ -34,7 +45,7 @@ static double         W = 200., H = 200.;
 void rayCasting(void) {
 	using namespace cimg_library;
 	
-	CImg<unsigned char> fundo("../imagem/olaf4.jpg");
+	CImg<unsigned char> fundo("../imagem/frozen.jpg");
 	
 	int quantObjetos, quantLuzes, indice;
 	double l, c, x, y, Dy, Dx, t;
@@ -43,7 +54,7 @@ void rayCasting(void) {
 	Objeto *cenario[10];
 	Luz *luzes[10];
 
-	double d = 1000;
+	double d = 900;
 
 	double observador[3] = {0,0,0};
 	double luzAmbiente[3] = {0.5, 0.5, 0.5};
@@ -139,15 +150,18 @@ void Teclado(unsigned char key, int x, int y) {
 }
 
 void redimenciona(int w, int h) {
-	int wSize = w, hSize = h;
-	if (h >= w) {
-		hSize = w*H/W;
-		glViewport(0, (h-hSize)/2, wSize, hSize);
-	}
-	else if (h < w) {
-		wSize = h*W/H;
-		glViewport((w-wSize)/2, 0,  wSize, hSize);
-	}
+	int hSize = w*H/W;
+	int wSize = h*W/H;
+
+	if (h > H_Npixels and w > W_Npixels) 
+		glViewport((w-wSize)/2, (h-hSize)/2, wSize, wSize);
+	
+	else if (h >= w) 
+		glViewport(0, (h-hSize)/2, w, hSize);
+	
+	else if (h < w) 
+		glViewport((w-wSize)/2, 0,  wSize, h);
+	
  
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
