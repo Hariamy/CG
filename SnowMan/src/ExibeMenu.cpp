@@ -80,3 +80,9 @@ void exibeMenu(){
 	cout << "\n\n";
 
 }
+
+void limpaMenu() {
+	system("clear");
+	system("clear");
+	system("clear");
+}

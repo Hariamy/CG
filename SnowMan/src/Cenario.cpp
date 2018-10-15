@@ -25,12 +25,17 @@ void Cenario::addCamera(Camera *camera) {
 void Cenario::setCamera(int indice) {
 	if (indice != cameraAtual){
 		if (coordCamera) {
-			for (int i = 0; i < quantLuzes; i++) luzes[i]->mudaCoodMundo(cameras[cameraAtual]);
+			//for (int i = 0; i < quantLuzes; i++) luzes[i]->mudaCoodMundo(cameras[cameraAtual]);
 			for (int i = 0; i < quantObjetos; i++) objetos[i]->mudaCoodMundo(cameras[cameraAtual]);
+
+			//for (int i = 0; i < quantLuzes; i++) luzes[i]->mudaCoodCamera(cameras[indice]);
+			for (int i = 0; i < quantObjetos; i++) objetos[i]->mudaCoodCamera(cameras[indice]);
+		} else{
+			for (int i = 0; i < quantLuzes; i++) luzes[i]->mudaCoodCamera(cameras[indice]);
+			for (int i = 0; i < quantObjetos; i++) objetos[i]->mudaCoodCamera(cameras[indice]);
+			
 		}
 
-		for (int i = 0; i < quantLuzes; i++) luzes[i]->mudaCoodCamera(cameras[indice]);
-		for (int i = 0; i < quantObjetos; i++) objetos[i]->mudaCoodCamera(cameras[indice]);
 		
 		coordCamera = true;
 		cameraAtual = indice;

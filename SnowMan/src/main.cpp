@@ -284,7 +284,7 @@ void setGlobais(){
 void Teclado(unsigned char key, int x, int y) {	
 	switch((char)key) {
 		case 27: //ESC
-			glutDestroyWindow(0); exit(0); break;
+			limpaMenu(); glutDestroyWindow(0); exit(0); break;
 
 		case 48: //0
 			cenario->setCamera(0); break;
@@ -351,6 +351,7 @@ int main(int argc, char **argv) {
 	glutDisplayFunc(rayCasting);
 	glutReshapeFunc(redimenciona);
 	glutKeyboardFunc(Teclado);
+	glutCloseFunc(limpaMenu);
 
 	glewExperimental = GL_TRUE;
 	glewInit();

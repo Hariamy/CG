@@ -24,6 +24,7 @@
 #define FUNDO_NORMAL	"\x1B[49m"
 
 void exibeMenu();
+void limpaMenu();
 
 #endif
 
