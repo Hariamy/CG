@@ -20,7 +20,8 @@ public:
 	
 	bool intersecaoCor(double D[3], double o[3]);
 	bool intersecaoSombra(double D[3], double o[3]);
-	void mudaCoodCamera(Camera camera);
+	void mudaCoodCamera(Camera *camera);
+	void mudaCoodMundo(Camera *camera);
 
 
 private:

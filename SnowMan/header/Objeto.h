@@ -16,7 +16,8 @@ public:
 	virtual bool intersecaoSombra(double D[3], double o[3]){};
 	virtual double getT(){};
 	virtual void getN(double Pint[3], double *n){};
-	virtual void mudaCoodCamera(Camera camera){};
+	virtual void mudaCoodCamera(Camera *camera){};
+	virtual void mudaCoodMundo(Camera *camera){};
 
 private:
 	Material *material;

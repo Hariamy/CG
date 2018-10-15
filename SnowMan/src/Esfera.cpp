@@ -68,7 +68,11 @@ bool Esfera::intersecaoSombra(double D[3], double o[3]) {
 	return false;
 }
 
-void Esfera::mudaCoodCamera(Camera camera){
-	camera.transMundoCamera(centro);
+void Esfera::mudaCoodCamera(Camera *camera){
+	camera->transMundoCamera(centro);
+
+}
+void Esfera::mudaCoodMundo(Camera *camera){
+	camera->transCameraMundo(centro);
 
 }

@@ -10,7 +10,8 @@ public:
 	void getCoordenada(double *ret);
 	void getIf(double *ret);
 
-	void mudaCoodCamera(Camera camera);
+	void mudaCoodCamera(Camera *camera);
+	void mudaCoodMundo(Camera *camera);
 
 private:
 	double coordenada[3];

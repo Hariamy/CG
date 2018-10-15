@@ -133,9 +133,15 @@ return false;
 	
 }
 
-void Cone::mudaCoodCamera(Camera camera){
-	camera.transMundoCamera(centro);
-	camera.transMundoCamera(topo);
+void Cone::mudaCoodCamera(Camera *camera){
+	camera->transMundoCamera(centro);
+	camera->transMundoCamera(topo);
 	setCalculos();
 	
+}
+
+void Cone::mudaCoodMundo(Camera *camera){
+	camera->transCameraMundo(centro);
+	camera->transCameraMundo(topo);
+	setCalculos();
 }

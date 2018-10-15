@@ -22,6 +22,12 @@ void Luz::getIf(double *ret){
 	ret[2] = If[2];
 }
 
-void Luz::mudaCoodCamera(Camera camera){
-	camera.transMundoCamera(coordenada);
+void Luz::mudaCoodCamera(Camera *camera){
+	camera->transMundoCamera(coordenada);
 }
+
+void Luz::mudaCoodMundo(Camera *camera){
+	camera->transCameraMundo(coordenada);
+
+}
+
