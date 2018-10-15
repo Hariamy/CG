@@ -10,7 +10,7 @@ g++ -c Funcoes.cpp -o Funcoes.o && g++ -c Luz.cpp -o Luz.o && g++ -c Objeto.cpp 
 g++ -o main Cone.o Esfera.o Objeto.o Material.o Luz.o Funcoes.o snowPOO.o -lGL -lGLU -lGLEW -lglut -lm -Wno-write-strings
 
 --------modo 3
-g++ -c *.cpp && g++ -o main *.o -O2 -L -lm -lpthread -lX11 -lGL -lGLU -lGLEW -lglut -Wno-write-strings
+g++ -c *.cpp && g++ -o main *.o -O2 -L -lm -lpthread -lX11 -lGL -lGLU -lGLEW -lglut -Wno-write-strings && ./main
 
 
 fazer camera e cenario
@@ -90,7 +90,7 @@ void setCenario(){
 	cenario->addCamera(cameraLadoE);
 	cenario->addCamera(cameraCima);
 
-//-----------------------------MATERIAIS-----------------------------//
+//----------------------------MATERIAIS----------------------------//
 
 	double amb1[3] = {1.5, 1.5, 1.5}; 
 	double dif1[3] = {0.6, 0.6, 0.6}; 
@@ -170,8 +170,7 @@ void setCenario(){
 	cenario->addObjeto(cartola);
 	cenario->addObjeto(nariz);
 
-
-//-----------------------------LUZES-----------------------------//
+//------------------------------LUZES------------------------------//
 	double coodYLuz1 = 1000;
 	double coodZLuz1 = 600;
 	double coodZLuz2 = 500;
@@ -230,11 +229,9 @@ void rayCasting(void) {
 	using namespace cimg_library;
 	
 	CImg<unsigned char> fundo("../imagem/frozen.jpg");
-	
-	int quantObjetos, quantLuzes, indice;
+
 	double l, c, x, y, Dy, Dx;
 	double Ipix[3];
-	bool intercepta;
 	
 	Dx = W/W_Npixels;
 	Dy = H/H_Npixels;
@@ -242,6 +239,7 @@ void rayCasting(void) {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glBegin(GL_POINTS);
+
 		for(l = 0; l < H_Npixels; l++){
 			y = H/2 - Dy/2 - l*Dy;
 
@@ -251,15 +249,9 @@ void rayCasting(void) {
 				double pixel[3] = {x, y, -d};
 
 				if (not cenario->cor(pixel, Ipix)) {
-					int xImg = c;         //IMAGEM NORMAL
-					int yImg = l;		  //IMAGEM NORMAL
-					
-					//int xImg = W_Npixels - c; //INVERTE IMAGEM
-					//int yImg = H_Npixels - l; //INVERTE IMAGEM
-
-					Ipix[0] = (double)fundo(xImg, yImg, 0, 0)/255;
-					Ipix[1] = (double)fundo(xImg, yImg, 0, 1)/255;
-					Ipix[2] = (double)fundo(xImg, yImg, 0, 2)/255;
+					Ipix[0] = (double)fundo(c, l, 0, 0)/255;
+					Ipix[1] = (double)fundo(c, l, 0, 1)/255;
+					Ipix[2] = (double)fundo(c, l, 0, 2)/255;
 				}
 
 				glColor3f(Ipix[0], Ipix[1], Ipix[2]);
@@ -274,7 +266,6 @@ void rayCasting(void) {
 
 void setGlobais(){
 	glClearColor(0.8, 0.9, 0.9, 0.0);
-
 	setCenario();
 	cenario->setCamera(4);
 	d = 900;
@@ -313,7 +304,8 @@ void Teclado(unsigned char key, int x, int y) {
 		case 45: //-
 			d -= 50; break;
 
-		default: printf("%d \n", key); break;
+		default:
+			break;
 	}
 	glutPostRedisplay();
 }
@@ -341,7 +333,6 @@ int main(int argc, char **argv) {
 	setGlobais();
 
 	glutInit(&argc, argv);
-
 	glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA); 
 	glutInitWindowSize(W_Npixels, H_Npixels);
@@ -355,7 +346,6 @@ int main(int argc, char **argv) {
 
 	glewExperimental = GL_TRUE;
 	glewInit();
-
 
 	glutMainLoop(); 
 }
