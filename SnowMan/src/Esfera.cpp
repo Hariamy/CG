@@ -48,8 +48,8 @@ bool Esfera::intersecaoSombra(double D[3], double o[3]) {
 	sub(o, centro, w); 
 	
 	a = prod(D, D);
-	b = 2 * prod(D, w);// + 2 *prod(o, D);
-	c = prod(w, w) - raio*raio;// + 2 * prod(w, o) + prod(o, o) ;
+	b = 2 * prod(D, w);
+	c = prod(w, w) - raio*raio;
 
 	delta = (b*b) - (4*a*c);
 

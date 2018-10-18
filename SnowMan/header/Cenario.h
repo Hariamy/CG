@@ -27,8 +27,8 @@ private:
 
 	bool coordCamera;
 
-	double observador[3] = {0, 0, 0};
-	double luzAmbiente[3] = {0.5, 0.5, 0.5};
+	double observador[3];
+	double luzAmbiente[3];
 
 	void corLuz(Objeto *obj, double Pint[3], Luz *luz, double *Ipix);
 	void corAmbriente(Objeto *obj, double Iamb[3], double *Ipix);

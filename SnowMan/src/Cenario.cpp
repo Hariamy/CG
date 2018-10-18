@@ -1,10 +1,19 @@
 #include "../header/Cenario.h"
+#include <iostream>
 
 Cenario::Cenario(){
 	quantObjetos = 0;
 	quantLuzes = 0;
 	quantCameras = 0;
 	coordCamera = false;
+
+	observador[0] = 0;
+	observador[1] = 0;
+	observador[2] = 0;
+
+	luzAmbiente[0] = 0.2;
+	luzAmbiente[1] = 0.2;
+	luzAmbiente[2] = 0.2;
 }
 
 void Cenario::addObjeto(Objeto *objeto) {
@@ -25,11 +34,12 @@ void Cenario::addCamera(Camera *camera) {
 void Cenario::setCamera(int indice) {
 	if (indice != cameraAtual){
 		if (coordCamera) {
-			//for (int i = 0; i < quantLuzes; i++) luzes[i]->mudaCoodMundo(cameras[cameraAtual]);
+			for (int i = 0; i < quantLuzes; i++) luzes[i]->mudaCoodMundo(cameras[cameraAtual]);
 			for (int i = 0; i < quantObjetos; i++) objetos[i]->mudaCoodMundo(cameras[cameraAtual]);
 
-			//for (int i = 0; i < quantLuzes; i++) luzes[i]->mudaCoodCamera(cameras[indice]);
+			for (int i = 0; i < quantLuzes; i++) luzes[i]->mudaCoodCamera(cameras[indice]);
 			for (int i = 0; i < quantObjetos; i++) objetos[i]->mudaCoodCamera(cameras[indice]);
+		
 		} else{
 			for (int i = 0; i < quantLuzes; i++) luzes[i]->mudaCoodCamera(cameras[indice]);
 			for (int i = 0; i < quantObjetos; i++) objetos[i]->mudaCoodCamera(cameras[indice]);
@@ -64,16 +74,17 @@ bool Cenario::cor(double pixel[3], double *Ipix) {
 	if (intercepta) {
 		corAmbriente(objetos[indice], luzAmbiente, Ipix);
 		prodVC(v, t, Pint);
+		objetos[indice]->getN(Pint, n);
+		
 		for (int i = 0; i < quantLuzes; i++) {
 			sombra = false;
 			luzes[i]->getCoordenada(aux);
 			sub(aux, Pint, vSombra);
-			objetos[indice]->getN(Pint, n);
 
 			if (prod(n, vSombra) >= 0) {
 				for (int j = 0; j < quantObjetos and sombra == false; j++) {
 					if (j != indice and objetos[j]->intersecaoSombra(vSombra, Pint)) {
-						//sombra = true;
+						sombra = true;
 					}
 				}
 
@@ -102,7 +113,6 @@ void Cenario::corLuz(Objeto *obj, double Pint[3], Luz *luz, double *Ipix) {
 	double observador[3] = {0, 0, 0};
 	int m;
 
-
 	obj->getN(Pint, n);
 	obj->getMaterial().getKesp(Kesp);
 	obj->getMaterial().getKdif(Kdif);
@@ -119,12 +129,14 @@ void Cenario::corLuz(Objeto *obj, double Pint[3], Luz *luz, double *Ipix) {
 	vetNormal(l, l);
 
 	prodLN = prod(l, n);
-	if (prodLN < 0) prodLN = 0;
 	
-	prodVC(n, 2*(prodLN), aux);
+	prodVC(n, 2*(prod(l, n)), aux);
 	sub(aux, l, r);
 	
 	prodVR = pow(prod(v, r), m);
+
+	if (prodVR < 0) prodVR = 0;
+	if (prodLN < 0) prodLN = 0;
 
 	arroba(If, Kdif, Idif);
 	arroba(If, Kesp, Iesp);

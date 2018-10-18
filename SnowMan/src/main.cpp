@@ -18,6 +18,7 @@ fazer camera e cenario
 
 #include <cmath>
 #include <cstdio>
+#include <string>
 #include <iostream>
 
 #include <GL/glew.h>
@@ -40,7 +41,10 @@ static unsigned int   W_Npixels = 700, H_Npixels = 700;
 static double         W = 200., H = 200.;
 
 Cenario *cenario = new Cenario();
+char planoFundo[5][30];
+int indiceFundo = 0;
 double d;
+
 
 
 void setCenario(){
@@ -107,10 +111,10 @@ void setCenario(){
 	double esp3[3] = {0.9, 0.9, 0.9};
 	Material *olhoMat = new Material(amb3, dif3, esp3, 9);
 
-	double amb4[3] = {0.2, 0.7, 0.2}; 
+	double amb4[3] = {0.2, 0.72, 0.2}; 
 	double dif4[3] = {0.2, 0.72, 0.2}; 
-	double esp4[3] = {0.8, 0.9, 0.8};
-	Material *cartolaMat = new Material(amb4, dif4, esp4, 2);
+	double esp4[3] = {0.2, 0.72, 0.2};
+	Material *cartolaMat = new Material(amb4, dif4, esp4, 10);
 
 	double amb5[3] = {0.9, 0.72, 0.2}; 
 	double dif5[3] = {0.9, 0.72, 0.2}; 
@@ -124,8 +128,8 @@ void setCenario(){
 
 //-----------------------------OBJETOS-----------------------------//
 
-	double centro10[3] = {0, -1050 , 0};
-	Objeto *piso = new Esfera(1000, centro10, pisoMat);
+	double centro10[3] = {100, -1050 , 0};
+	Objeto *piso = new Esfera(1000, centro10, cartolaMat);
 	
 	double centro1[3] = {0, 40, 0};
 	Objeto *cabeca = new Esfera(20.0, centro1, corpoMat);
@@ -156,10 +160,17 @@ void setCenario(){
 	double topo2[3] = {0, 34, 36};
 	Objeto *nariz = new Cone(3, centro9, topo2, narizMat);
 
-	double centro11[3] = {0, -50, 0};
-	double topo3[3] = {0, 90, 0};
-	Objeto *coneSombra = new Cone(19, topo3, centro11, cartolaMat);
+	double centro11[3] = {20, -80, 0};
+	double topo3[3] = {-20, 40, 0};
+	Objeto *coneSombra = new Cone(40, centro11, topo3, cartolaMat);
 
+	double centro12[3] = {100, 0, 0};
+	Objeto *esferaSombra = new Esfera(19, centro12, cartolaMat);
+
+	double centro13[3] = {100, 0, -100};
+	Objeto *esferaSombra2 = new Esfera(100, centro13, botaoMat);
+
+	/*
 	cenario->addObjeto(cabeca);
 	cenario->addObjeto(corpo);
 	cenario->addObjeto(botao1);
@@ -169,13 +180,18 @@ void setCenario(){
 	cenario->addObjeto(olho2);
 	cenario->addObjeto(cartola);
 	cenario->addObjeto(nariz);
+	*/
+	cenario->addObjeto(coneSombra);
+	cenario->addObjeto(piso);
+	cenario->addObjeto(esferaSombra);
+	cenario->addObjeto(esferaSombra2);
 
 //------------------------------LUZES------------------------------//
 	double coodYLuz1 = 1000;
 	double coodZLuz1 = 600;
 	double coodZLuz2 = 500;
 
-	double coodLuzPoste[3] = {0, 1000, 200};
+	double coodLuzPoste[3] = {0, 200, 200};
 	double corPoste[3] = {0.6, 0.6, 0.6};
 	Luz *poste = new Luz(coodLuzPoste, corPoste);
 
@@ -210,6 +226,8 @@ void setCenario(){
 	double coodLuz10[3] = {10, coodYLuz1, coodZLuz2};
 	Luz *poste10 = new Luz(coodLuz10, cor);
 
+	cenario->addLuz(poste);
+	/*
 	cenario->addLuz(poste1);
 	cenario->addLuz(poste2);
 	cenario->addLuz(poste3);
@@ -220,7 +238,15 @@ void setCenario(){
 	cenario->addLuz(poste8);
 	cenario->addLuz(poste9);
 	cenario->addLuz(poste10);
+	*/
 
+//--------------------------IMAGEM FUNDO---------------------------//
+
+	strcpy(planoFundo[0], "../imagem/neve.jpg");
+	strcpy(planoFundo[1], "../imagem/neve1.jpg");
+	strcpy(planoFundo[2], "../imagem/neve2.jpg");
+	strcpy(planoFundo[3], "../imagem/praia.jpg");
+	strcpy(planoFundo[4], "../imagem/frozen.jpg");
 }
 
 ///////////////////FUNÇÃO QUE PINTA A TELA
@@ -228,7 +254,7 @@ void setCenario(){
 void rayCasting(void) {
 	using namespace cimg_library;
 	
-	CImg<unsigned char> fundo("../imagem/frozen.jpg");
+	CImg<unsigned char> plano(planoFundo[indiceFundo]);
 
 	double l, c, x, y, Dy, Dx;
 	double Ipix[3];
@@ -249,9 +275,9 @@ void rayCasting(void) {
 				double pixel[3] = {x, y, -d};
 
 				if (not cenario->cor(pixel, Ipix)) {
-					Ipix[0] = (double)fundo(c, l, 0, 0)/255;
-					Ipix[1] = (double)fundo(c, l, 0, 1)/255;
-					Ipix[2] = (double)fundo(c, l, 0, 2)/255;
+					Ipix[0] = (double)plano(c, l, 0, 0)/255;
+					Ipix[1] = (double)plano(c, l, 0, 1)/255;
+					Ipix[2] = (double)plano(c, l, 0, 2)/255;
 				}
 
 				glColor3f(Ipix[0], Ipix[1], Ipix[2]);
@@ -303,6 +329,21 @@ void Teclado(unsigned char key, int x, int y) {
 
 		case 45: //-
 			d -= 50; break;
+
+		case 'a': //a
+			indiceFundo = 0; break;
+		
+		case 'b': //b
+			indiceFundo = 1; break;
+		
+		case 'c': //c
+			indiceFundo = 2; break;
+
+		case 'd': //d
+			indiceFundo = 3; break;
+		
+		case 'e': //e
+			indiceFundo = 4; break;
 
 		default:
 			break;
