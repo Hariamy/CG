@@ -27,6 +27,7 @@ fazer camera e cenario
 #include "../lib/CImg/CImg.h"
 
 #include "../header/ExibeMenu.h"
+#include "../header/Cilindro.h"
 #include "../header/Luz.h"
 #include "../header/Objeto.h"
 #include "../header/Esfera.h"
@@ -96,7 +97,7 @@ void setCenario(){
 
 //----------------------------MATERIAIS----------------------------//
 
-	double amb1[3] = {1.5, 1.5, 1.5}; 
+	double amb1[3] = {2, 2, 2}; 
 	double dif1[3] = {0.6, 0.6, 0.6}; 
 	double esp1[3] = {0.6, 0.6, 0.6};
 	Material *corpoMat = new Material(amb1, dif1, esp1, 8);
@@ -125,6 +126,11 @@ void setCenario(){
 	double dif6[3] = {0.8, 0.8, 0.8}; 
 	double esp6[3] = {0.8, 0.8, 0.8};
 	Material *pisoMat = new Material(amb6, dif6, esp6, 1);
+	
+	double amb7[3] = {1.5, 1.5, 1.5}; 
+	double dif7[3] = {0.6, 0.6, 0.6}; 
+	double esp7[3] = {0.6, 0.6, 0.6};
+	Material *prataMat = new Material(amb7, dif7, esp7, 8);
 
 //-----------------------------OBJETOS-----------------------------//
 
@@ -170,6 +176,11 @@ void setCenario(){
 	double centro13[3] = {100, 0, -100};
 	Objeto *esferaSombra2 = new Esfera(100, centro13, botaoMat);
 
+
+	double centro14[3] = {0, -40, 0};
+	double topo4[3] = {0, 20, 0};
+	Objeto *cilindro = new Cilindro(40, centro14, topo4, narizMat);
+
 	/*
 	cenario->addObjeto(cabeca);
 	cenario->addObjeto(corpo);
@@ -180,11 +191,15 @@ void setCenario(){
 	cenario->addObjeto(olho2);
 	cenario->addObjeto(cartola);
 	cenario->addObjeto(nariz);
-	*/
-	cenario->addObjeto(coneSombra);
 	cenario->addObjeto(piso);
+	
+	cenario->addObjeto(coneSombra);
 	cenario->addObjeto(esferaSombra);
 	cenario->addObjeto(esferaSombra2);
+	*/
+	
+	cenario->addObjeto(cilindro);
+
 
 //------------------------------LUZES------------------------------//
 	double coodYLuz1 = 1000;
@@ -303,46 +318,46 @@ void Teclado(unsigned char key, int x, int y) {
 		case 27: //ESC
 			limpaMenu(); glutDestroyWindow(0); exit(0); break;
 
-		case 48: //0
+		case '1': 
 			cenario->setCamera(0); break;
 
-		case 49: //1
+		case '2': 
 			cenario->setCamera(1); break;
 
-		case 50: //2
+		case '3': 
 			cenario->setCamera(2); break;
 
-		case 51: //3
+		case '4': 
 			cenario->setCamera(3); break;
 
-		case 52: //4
+		case '5': 
 			cenario->setCamera(4); break;
 
-		case 53: //5
+		case '6': 
 			cenario->setCamera(5); break;
 		
-		case 54: //6
+		case '7': 
 			cenario->setCamera(6); break;
 
-		case 43: //+
+		case '+': 
 			d += 50; break;
 
-		case 45: //-
+		case '-': 
 			d -= 50; break;
 
-		case 'a': //a
+		case 'a': 
 			indiceFundo = 0; break;
 		
-		case 'b': //b
+		case 'b': 
 			indiceFundo = 1; break;
 		
-		case 'c': //c
+		case 'c': 
 			indiceFundo = 2; break;
 
-		case 'd': //d
+		case 'd': 
 			indiceFundo = 3; break;
 		
-		case 'e': //e
+		case 'e': 
 			indiceFundo = 4; break;
 
 		default:

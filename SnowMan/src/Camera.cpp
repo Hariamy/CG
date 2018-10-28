@@ -76,22 +76,14 @@ void Camera::setMatrizes(){
 
 void Camera::transMundoCamera(double *ponto){
 	double aux[3];
-	aux[0] = MundoParaCamera[0][0] * ponto[0] + MundoParaCamera[0][1] * ponto[1] + MundoParaCamera[0][2] * ponto[2] + MundoParaCamera[0][3];
-
-	aux[1] = MundoParaCamera[1][0] * ponto[0] + MundoParaCamera[1][1] * ponto[1] + MundoParaCamera[1][2] * ponto[2] + MundoParaCamera[1][3];
-
-	aux[2] = MundoParaCamera[2][0] * ponto[0] + MundoParaCamera[2][1] * ponto[1] + MundoParaCamera[2][2] * ponto[2] + MundoParaCamera[2][3];
-	
+	prodMatVet(MundoParaCamera, ponto, aux);
 	for (int i = 0; i < 3; i++) ponto[i] = aux[i];
 }
 
 void Camera::transCameraMundo(double *ponto){
 	double aux[3];
-	aux[0] = CameraParaMundo[0][0] * ponto[0] + CameraParaMundo[0][1] * ponto[1] + CameraParaMundo[0][2] * ponto[2] + CameraParaMundo[0][3];
-
-	aux[1] = CameraParaMundo[1][0] * ponto[0] + CameraParaMundo[1][1] * ponto[1] + CameraParaMundo[1][2] * ponto[2] + CameraParaMundo[1][3];
-
-	aux[2] = CameraParaMundo[2][0] * ponto[0] + CameraParaMundo[2][1] * ponto[1] + CameraParaMundo[2][2] * ponto[2] + CameraParaMundo[2][3];
-	
+	prodMatVet(CameraParaMundo, ponto, aux);
 	for (int i = 0; i < 3; i++) ponto[i] = aux[i];
+	
+	
 }
