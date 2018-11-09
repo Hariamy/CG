@@ -55,12 +55,12 @@ void Cilindro::getN(double Pint[3], double * n){
 
 bool Cilindro::intersecaoCor(double D[3], double o[3]) {
 	double a, b, c, delta, x1, x2, MD[3], MA[3], Pint[3], V[3], CE[3], A[3], tc, tb, tt, nb[3], nt[3], w[3], aux[3];
+
 	bool intersepta = false;
 	t = std::numeric_limits<double>::max(); 
 	sub(o, base, A);
 	prodMatVet(M, D, MD);
 	prodMatVet(M, A, MA);
-	setW(o);
 
 	a = prod(MD, MD);
 	b = 2 * prod(MA, MD);
@@ -77,6 +77,7 @@ bool Cilindro::intersecaoCor(double D[3], double o[3]) {
 		x2 = (-b-sqrt(delta))/(2*a);
 		tc = (x1 < x2) ? x1 : x2;
 	}
+
 	prodVC(D, tc, Pint);
 	sub(Pint, base, V);
 	prodVC(d, prod(V, d), CE);
@@ -91,11 +92,11 @@ bool Cilindro::intersecaoCor(double D[3], double o[3]) {
 
 	sub(base, topo, nb);
 	vetNormal(nb, nb);
-	sub(o, base, w);
+	sub(base, o, w); //wbarra
 	tb = prod(w, nb)/prod(D, nb);
 	prodVC(D, tb, Pint);
 	sub(w, Pint, aux);
-	if (norma(aux) <= raio) {
+	if (norma(aux) <= raio and tb < t) {
 		t = tb;
 		N[0] = nb[0];
 		N[1] = nb[1];
@@ -106,12 +107,12 @@ bool Cilindro::intersecaoCor(double D[3], double o[3]) {
 	//Interseçao com o topo;
 	sub(topo, base, nt);
 	vetNormal(nt, nt);
-	sub(o, topo, w);
+	sub(topo, o, w); //wbarra
 	tt = prod(w, nt)/prod(D, nt);
 	prodVC(D, tt, Pint);
 	sub(w, Pint, aux);
 	if (norma(aux) <= raio and tt < t) {
-		t = tt;		
+		t = tt;
 		N[0] = nt[0];
 		N[1] = nt[1];
 		N[2] = nt[2];
@@ -122,8 +123,73 @@ bool Cilindro::intersecaoCor(double D[3], double o[3]) {
 
 }
 bool Cilindro::intersecaoSombra(double D[3], double o[3]) {
+	double a, b, c, delta, x1, x2, MD[3], MA[3], Pint[3], V[3], CE[3], A[3], t, tc, tb, tt, nb[3], nt[3], w[3], aux[3];
+
+	bool intersepta = false;
+	t = std::numeric_limits<double>::max(); 
+	sub(o, base, A);
+	prodMatVet(M, D, MD);
+	prodMatVet(M, A, MA);
+
+	a = prod(MD, MD);
+	b = 2 * prod(MA, MD);
+	c = prod(MA, MA) - raio*raio;
+
+	delta = (b*b)-(4*a*c);
 	
-	return false;
+	if(delta < 0) return false;
+
+	if(delta == 0) tc = - b / (2*a);
+		
+	else{
+		x1 = (-b+sqrt(delta))/(2*a);
+		x2 = (-b-sqrt(delta))/(2*a);
+		tc = (x1 < x2) ? x1 : x2;
+	}
+
+	prodVC(D, tc, Pint);
+	sum(o, Pint, Pint);
+	sub(Pint, base, V);
+	prodVC(d, prod(V, d), CE);
+	sum(CE, base, E);
+	sub(Pint, E, N);
+
+	if (prod(V, d) > 0 and norma(CE) < lado) {
+		t = tc;
+		intersepta = true;
+	}
+	//Interceção com a base;
+
+	sub(base, topo, nb);
+	vetNormal(nb, nb);
+	sub(base, o, w); //wbarra
+	tb = prod(w, nb)/prod(D, nb);
+	prodVC(D, tb, Pint);
+	sub(w, Pint, aux);
+	if (norma(aux) <= raio and tb < t) {
+		t = tb;
+		N[0] = nb[0];
+		N[1] = nb[1];
+		N[2] = nb[2];
+		intersepta = true;
+	}
+
+	//Interseçao com o topo;
+	sub(topo, base, nt);
+	vetNormal(nt, nt);
+	sub(topo, o, w); //wbarra
+	tt = prod(w, nt)/prod(D, nt);
+	prodVC(D, tt, Pint);
+	sub(w, Pint, aux);
+	if (norma(aux) <= raio and tt < t) {
+		t = tt;
+		N[0] = nt[0];
+		N[1] = nt[1];
+		N[2] = nt[2];
+		intersepta = true;
+	}
+
+	return intersepta and t >= 0;
 }
 
 void Cilindro::mudaCoodCamera(Camera *camera){

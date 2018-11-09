@@ -44,27 +44,27 @@ bool Esfera::intersecaoCor(double D[3], double o[3]) {
 }
 bool Esfera::intersecaoSombra(double D[3], double o[3]) {
 	double a, b, c, delta, x1, x2, w[3], t, Pint[3];
-	
-	sub(o, centro, w); 
+	double zero[3] = {0, 0, 0};
+	sub(zero, centro, w); 
 	
 	a = prod(D, D);
-	b = 2 * prod(D, w);
-	c = prod(w, w) - raio*raio;
+	b = 2 * prod(D, w) + 2 * prod(D, o);
+	c = prod(w, w) + 2 * prod(w, o) + prod(o, o) - raio*raio;
 
 	delta = (b*b) - (4*a*c);
 
 	if(delta < 0) return false;
-	else {
-		if(delta == 0) t = -b / (2*a);
-			
-		else{
-			x1 = (-b+sqrt(delta))/(2*a);
-			x2 = (-b-sqrt(delta))/(2*a);
-			t = (x1 > x2) ? x1 : x2;
-		}
-
-		if (t >= 0) return true;
+	
+	if(delta == 0) t = -b / (2*a);
+		
+	else{
+		x1 = (-b+sqrt(delta))/(2*a);
+		x2 = (-b-sqrt(delta))/(2*a);
+		t = (x1 > x2) ? x1 : x2;
 	}
+
+	if (t >= 0) return true;
+	
 	return false;
 }
 

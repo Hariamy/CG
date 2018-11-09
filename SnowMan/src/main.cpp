@@ -42,8 +42,9 @@ static unsigned int   W_Npixels = 700, H_Npixels = 700;
 static double         W = 200., H = 200.;
 
 Cenario *cenario = new Cenario();
-char planoFundo[5][30];
-int indiceFundo = 0;
+char planoFundo[10][30];
+int indiceFundo = 4;
+int controlador = 4;
 double d;
 
 
@@ -52,47 +53,48 @@ void setCenario(){
 
 //-----------------------------CAMERAS-----------------------------//
 
-	double coordCameraFrente[3] = {0, 165, 1105}; 
-	double loockAtFrente[3] = {0, 116, 746};
-	double viewUpFrente[3] = {0, 233, 732};
-	Camera *cameraFrente = new Camera(coordCameraFrente, loockAtFrente, viewUpFrente);
+	double lookAt[3] = {0, 20, 0};
+	double viewUp[3] = {0, 80, 0};
 
-	double coordCameraCosta[3] = {0, 165, -1105}; 
-	double loockAtCosta[3] = {0, 116, -746};
-	double viewUpCosta[3] = {0, 233, -732};
-	Camera *cameraCosta = new Camera(coordCameraCosta, loockAtCosta, viewUpCosta);
+	double coordCameraFrente[3] = {-1.17, 102.57, 1109.32}; 
+	Camera *cameraFrente = new Camera(coordCameraFrente, lookAt, viewUp);
+
+	double coordCameraCosta[3] = {-1.17, 102.57, -1109.32}; 
+	Camera *cameraCosta = new Camera(coordCameraCosta, lookAt, viewUp);
+
+	double coordCameraLadoD[3] = {1109.32, 102.57, -1.17}; 
+	Camera *cameraLadoD = new Camera(coordCameraLadoD, lookAt, viewUp);
+
+	double coordCameraLadoE[3] = {-1109.32, 102.57, -1.17};
+	Camera *cameraLadoE = new Camera(coordCameraLadoE, lookAt, viewUp);
+
+	double coordCameraTortaD[3] = {868, 100, 691}; 
+	Camera *cameraTortaD = new Camera(coordCameraTortaD, lookAt, viewUp);
+
+	double coordCameraTortaE[3] = {-868, 100, 691};
+	Camera *cameraTortaE = new Camera(coordCameraTortaE, lookAt, viewUp);
+
+	double coordCameraTortaDT[3] = {868, 100, -691};
+	Camera *cameraTortaDT = new Camera(coordCameraTortaDT, lookAt, viewUp);
+
+	double coordCameraTortaET[3] = {-868, 100, -691};
+	Camera *cameraTortaET = new Camera(coordCameraTortaET, lookAt, viewUp);
 
 	double coordCameraCima[3] = {0, 874, 0}; 
 	double loockAtCima[3] = {0, 750, 0};
 	double viewUpCima[3] = {0, 760, -320};
 	Camera *cameraCima = new Camera(coordCameraCima, loockAtCima, viewUpCima);
 
-	double coordCameraLadoD[3] = {1114, 162, 0}; 
-	double loockAtLadoD[3] = {750, 114, 0};
-	double viewUpLadoD[3] = {760, 320, 0};
-	Camera *cameraLadoD = new Camera(coordCameraLadoD, loockAtLadoD, viewUpLadoD);
-
-	double coordCameraLadoE[3] = {-1114, 162, 0}; 
-	double loockAtLadoE[3] = {-750, 114, 0};
-	double viewUpLadoE[3] = {-760, 320, 0};
-	Camera *cameraLadoE = new Camera(coordCameraLadoE, loockAtLadoE, viewUpLadoE);
-
-	double coordCameraTortaD[3] = {868, 100, 691}; 
-	double loockAtTortaD[3] = {615, 75, 490};
-	double viewUpTortaD[3] = {615, 400, 490};
-	Camera *cameraTortaD = new Camera(coordCameraTortaD, loockAtTortaD, viewUpTortaD);
-
-	double coordCameraTortaE[3] = {-868, 100, 691}; 
-	double loockAtTortaE[3] = {-615, 75, 490};
-	double viewUpTortaE[3] = {-615, 400, 490};
-	Camera *cameraTortaE = new Camera(coordCameraTortaE, loockAtTortaE, viewUpTortaE);
-
 	cenario->addCamera(cameraCosta);
+	cenario->addCamera(cameraTortaDT);
 	cenario->addCamera(cameraLadoD);
 	cenario->addCamera(cameraTortaD);
 	cenario->addCamera(cameraFrente);
 	cenario->addCamera(cameraTortaE);
 	cenario->addCamera(cameraLadoE);
+	cenario->addCamera(cameraTortaET);
+
+
 	cenario->addCamera(cameraCima);
 
 //----------------------------MATERIAIS----------------------------//
@@ -132,10 +134,25 @@ void setCenario(){
 	double esp7[3] = {0.6, 0.6, 0.6};
 	Material *prataMat = new Material(amb7, dif7, esp7, 8);
 
+	double amb8[3] = {0.6, 0.2, 0.2}; 
+	double dif8[3] = {0.6, 0.2, 0.2}; 
+	double esp8[3] = {0.6, 0.2, 0.2};
+	Material *vermelhoMat = new Material(amb8, dif8, esp8, 1);
+
+	double amb9[3] = {1, 0.5, 0}; 
+	double dif9[3] = {1, 0.5, 0}; 
+	double esp9[3] = {1, 0.5, 0};
+	Material *laranjinhaMat = new Material(amb9, dif9, esp9, 1);
+
+	double amb10[3] = {0.59, 0.4, 0.3}; 
+	double dif10[3] = {0.59, 0.4, 0.3}; 
+	double esp10[3] = {0.59, 0.4, 0.3};
+	Material *cigarroMat = new Material(amb10, dif10, esp10, 1);
+
 //-----------------------------OBJETOS-----------------------------//
 
-	double centro10[3] = {100, -1050 , 0};
-	Objeto *piso = new Esfera(1000, centro10, cartolaMat);
+	double centro10[3] = {0, -2050 , 0};
+	Objeto *piso = new Esfera(2000, centro10, cartolaMat);
 	
 	double centro1[3] = {0, 40, 0};
 	Objeto *cabeca = new Esfera(20.0, centro1, corpoMat);
@@ -177,11 +194,11 @@ void setCenario(){
 	Objeto *esferaSombra2 = new Esfera(100, centro13, botaoMat);
 
 
-	double centro14[3] = {0, -40, 0};
-	double topo4[3] = {0, 20, 0};
-	Objeto *cilindro = new Cilindro(40, centro14, topo4, narizMat);
+	double centro14[3] = {20, 30, 0};
+	double topo4[3] = {100, 30, 0};
+	Objeto *cilindro = new Cilindro(2, centro14, topo4, cigarroMat);
 
-	/*
+	cenario->addObjeto(piso);
 	cenario->addObjeto(cabeca);
 	cenario->addObjeto(corpo);
 	cenario->addObjeto(botao1);
@@ -191,15 +208,14 @@ void setCenario(){
 	cenario->addObjeto(olho2);
 	cenario->addObjeto(cartola);
 	cenario->addObjeto(nariz);
-	cenario->addObjeto(piso);
+	cenario->addObjeto(cilindro);
+	/*
 	
 	cenario->addObjeto(coneSombra);
 	cenario->addObjeto(esferaSombra);
 	cenario->addObjeto(esferaSombra2);
-	*/
 	
-	cenario->addObjeto(cilindro);
-
+	*/
 
 //------------------------------LUZES------------------------------//
 	double coodYLuz1 = 1000;
@@ -257,11 +273,18 @@ void setCenario(){
 
 //--------------------------IMAGEM FUNDO---------------------------//
 
-	strcpy(planoFundo[0], "../imagem/neve.jpg");
-	strcpy(planoFundo[1], "../imagem/neve1.jpg");
-	strcpy(planoFundo[2], "../imagem/neve2.jpg");
-	strcpy(planoFundo[3], "../imagem/praia.jpg");
-	strcpy(planoFundo[4], "../imagem/frozen.jpg");
+	strcpy(planoFundo[0], "../imagem/cubemap/negz.jpg");
+	strcpy(planoFundo[1], "../imagem/cubemap/torto2.jpg");
+	strcpy(planoFundo[2], "../imagem/cubemap/negx.jpg");
+	strcpy(planoFundo[3], "../imagem/cubemap/negzx.jpg");
+	strcpy(planoFundo[4], "../imagem/cubemap/posz.jpg");
+	strcpy(planoFundo[5], "../imagem/cubemap/poszx.jpg");
+	strcpy(planoFundo[6], "../imagem/cubemap/posx.jpg");
+	strcpy(planoFundo[7], "../imagem/cubemap/torto1.jpg");
+	
+	strcpy(planoFundo[8], "../imagem/cubemap/negy.jpg");
+	strcpy(planoFundo[9], "../imagem/cubemap/posy.jpg");
+
 }
 
 ///////////////////FUNÇÃO QUE PINTA A TELA
@@ -290,9 +313,17 @@ void rayCasting(void) {
 				double pixel[3] = {x, y, -d};
 
 				if (not cenario->cor(pixel, Ipix)) {
-					Ipix[0] = (double)plano(c, l, 0, 0)/255;
-					Ipix[1] = (double)plano(c, l, 0, 1)/255;
-					Ipix[2] = (double)plano(c, l, 0, 2)/255;
+					if (cenario->getPiso()) {
+						Ipix[0] = (double)plano(c, l, 0, 0)/(255 * 2);
+						Ipix[1] = (double)plano(c, l, 0, 1)/(255 * 2);
+						Ipix[2] = (double)plano(c, l, 0, 2)/(255 * 2);
+					
+					} else {
+						Ipix[0] = (double)plano(c, l, 0, 0)/255;
+						Ipix[1] = (double)plano(c, l, 0, 1)/255;
+						Ipix[2] = (double)plano(c, l, 0, 2)/255;
+						
+					}
 				}
 
 				glColor3f(Ipix[0], Ipix[1], Ipix[2]);
@@ -309,7 +340,8 @@ void setGlobais(){
 	glClearColor(0.8, 0.9, 0.9, 0.0);
 	setCenario();
 	cenario->setCamera(4);
-	d = 900;
+	d = 700;
+
 }
 
 //Pra fechar a janeça com o ESC
@@ -318,47 +350,37 @@ void Teclado(unsigned char key, int x, int y) {
 		case 27: //ESC
 			limpaMenu(); glutDestroyWindow(0); exit(0); break;
 
-		case '1': 
-			cenario->setCamera(0); break;
+		case 'A':
+			if (controlador - 1 < 0) controlador = 7; 
+			else controlador --;
+			cenario->setCamera(controlador); indiceFundo = controlador; break;
 
-		case '2': 
-			cenario->setCamera(1); break;
+		case 'a':
+			if (controlador - 1 < 0) controlador = 7; 
+			else controlador --;
+			cenario->setCamera(controlador); indiceFundo = controlador; break;
 
-		case '3': 
-			cenario->setCamera(2); break;
+		case 'D':
+			if (controlador + 1 > 7) controlador = 0; 
+			else controlador ++;
+			cenario->setCamera(controlador); indiceFundo = controlador; break;
 
-		case '4': 
-			cenario->setCamera(3); break;
+		case 'd':
+			if (controlador + 1 > 7) controlador = 0; 
+			else controlador ++;
+			cenario->setCamera(controlador); indiceFundo = controlador; break;
+				
+		case 'W': 
+			cenario->setCamera(8); indiceFundo = 8; break;
 
-		case '5': 
-			cenario->setCamera(4); break;
-
-		case '6': 
-			cenario->setCamera(5); break;
-		
-		case '7': 
-			cenario->setCamera(6); break;
+		case 'w': 
+			cenario->setCamera(8); indiceFundo = 8; break;
 
 		case '+': 
 			d += 50; break;
 
 		case '-': 
 			d -= 50; break;
-
-		case 'a': 
-			indiceFundo = 0; break;
-		
-		case 'b': 
-			indiceFundo = 1; break;
-		
-		case 'c': 
-			indiceFundo = 2; break;
-
-		case 'd': 
-			indiceFundo = 3; break;
-		
-		case 'e': 
-			indiceFundo = 4; break;
 
 		default:
 			break;

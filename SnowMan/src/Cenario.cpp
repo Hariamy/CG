@@ -16,6 +16,10 @@ Cenario::Cenario(){
 	luzAmbiente[2] = 0.2;
 }
 
+bool Cenario::getPiso() {
+	return piso;
+}
+
 void Cenario::addObjeto(Objeto *objeto) {
 	objetos[quantObjetos] = objeto;
 	quantObjetos++;
@@ -53,6 +57,7 @@ void Cenario::setCamera(int indice) {
 }
 
 bool Cenario::cor(double pixel[3], double *Ipix) {
+	piso = false;
 	double vSombra[3], aux[3], n[3], v[3], Pint[3], t;
 	int indice;
 	bool intercepta, sombra;
@@ -80,6 +85,7 @@ bool Cenario::cor(double pixel[3], double *Ipix) {
 			sombra = false;
 			luzes[i]->getCoordenada(aux);
 			sub(aux, Pint, vSombra);
+			vetNormal(vSombra, vSombra);
 
 			if (prod(n, vSombra) >= 0) {
 				for (int j = 0; j < quantObjetos and sombra == false; j++) {
@@ -90,7 +96,10 @@ bool Cenario::cor(double pixel[3], double *Ipix) {
 
 				if (not sombra) corLuz(objetos[indice], Pint, luzes[i], Ipix);	
 			}
-
+		}
+		if (indice == 0) {
+			if (sombra) piso = true;
+			return false;
 		}
 		return true;
 	}

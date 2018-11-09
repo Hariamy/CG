@@ -26,6 +26,7 @@ private:
 	int cameraAtual;
 
 	bool coordCamera;
+	bool piso;
 
 	double observador[3];
 	double luzAmbiente[3];
@@ -40,6 +41,7 @@ public:
 	void addCamera(Camera *camera);
 	void setCamera(int indice);
 	bool cor(double pixel[3], double *Ipix);
+	bool getPiso();
 	
 };
 
