@@ -7,6 +7,7 @@ Esfera::Esfera(double raio, double centro[3], Material *material_):Objeto(materi
 	this->centro[1] = centro[1];
 	this->centro[2] = centro[2];
 }
+
 void Esfera::setW(double observador[3]){ 
 	sub(observador, centro, w); 
 }

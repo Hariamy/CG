@@ -26,14 +26,17 @@ fazer camera e cenario
 
 #include "../lib/CImg/CImg.h"
 
-#include "../header/ExibeMenu.h"
-#include "../header/Cilindro.h"
-#include "../header/Luz.h"
 #include "../header/Objeto.h"
 #include "../header/Esfera.h"
 #include "../header/Cone.h"
-#include "../header/Funcoes.h"
+#include "../header/Cilindro.h"
+#include "../header/Triangulo.h"
+
+#include "../header/Luz.h"
 #include "../header/Camera.h"
+#include "../header/Funcoes.h"
+
+#include "../header/ExibeMenu.h"
 #include "../header/Cenario.h"
 
 using namespace std;
@@ -146,8 +149,8 @@ void setCenario(){
 
 	double amb10[3] = {0.59, 0.4, 0.3}; 
 	double dif10[3] = {0.59, 0.4, 0.3}; 
-	double esp10[3] = {0.59, 0.4, 0.3};
-	Material *cigarroMat = new Material(amb10, dif10, esp10, 1);
+	double esp10[3] = {1, 1, 1};
+	Material *cigarroMat = new Material(amb10, dif10, esp10, 4);
 
 //-----------------------------OBJETOS-----------------------------//
 
@@ -194,9 +197,26 @@ void setCenario(){
 	Objeto *esferaSombra2 = new Esfera(100, centro13, botaoMat);
 
 
-	double centro14[3] = {20, 30, 0};
-	double topo4[3] = {100, 30, 0};
-	Objeto *cilindro = new Cilindro(2, centro14, topo4, cigarroMat);
+	double centro14[3] = {100, 0, 0};
+	double topo4[3] = {-100, 0, 0};
+	Objeto *cilindro = new Cilindro(50 , centro14, topo4, cigarroMat);
+
+
+	double P1[3] = {0, 0, 0};
+	double P2[3] = {100, 20, 30};
+	double P3[3] = {20, 10, -40};
+	double P4[3] = {0, 80, 0};
+	Objeto *triangulo1 = new Triangulo(P1, P3, P2, narizMat);
+	Objeto *triangulo2 = new Triangulo(P2, P3, P4, corpoMat);
+	Objeto *triangulo3 = new Triangulo(P4, P3, P1, botaoMat);
+	Objeto *triangulo4 = new Triangulo(P4, P1, P2, cartolaMat);
+	/*
+
+	cenario->addObjeto(triangulo1);
+	cenario->addObjeto(triangulo2);
+	cenario->addObjeto(triangulo3);
+	cenario->addObjeto(triangulo4);
+	*/
 
 	cenario->addObjeto(piso);
 	cenario->addObjeto(cabeca);
@@ -208,9 +228,8 @@ void setCenario(){
 	cenario->addObjeto(olho2);
 	cenario->addObjeto(cartola);
 	cenario->addObjeto(nariz);
-	cenario->addObjeto(cilindro);
-	/*
 	
+	/*
 	cenario->addObjeto(coneSombra);
 	cenario->addObjeto(esferaSombra);
 	cenario->addObjeto(esferaSombra2);
@@ -339,7 +358,7 @@ void rayCasting(void) {
 void setGlobais(){
 	glClearColor(0.8, 0.9, 0.9, 0.0);
 	setCenario();
-	cenario->setCamera(4);
+	cenario->setCamera(1);
 	d = 700;
 
 }
@@ -380,7 +399,8 @@ void Teclado(unsigned char key, int x, int y) {
 			d += 50; break;
 
 		case '-': 
-			d -= 50; break;
+			if (d - 50 <= 0) d = 50;
+			else d -= 50; break;
 
 		default:
 			break;
